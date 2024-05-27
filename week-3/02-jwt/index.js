@@ -7,34 +7,34 @@ const passwordCheck = zod.string().min(6);
 
 
 function signJwt(username, password) {
-    const usernameRes = emailCheck.safeParse(username);
-    const passRes = passwordCheck.safeParse(password);
+  const usernameRes = emailCheck.safeParse(username);
+  const passRes = passwordCheck.safeParse(password);
 
-    if(!usernameRes.success || !passRes.success) return null;
-    
-    const token = jwt.sign({ username}, jwtPassword)
-    return token;
+  if (!usernameRes.success || !passRes.success) return null;
+
+  const token = jwt.sign({ username }, jwtPassword)
+  return token;
 }
 
 
 function verifyJwt(token) {
-    let ans = true;
-    try{
-      token.verify(token,jwtPassword);
-    }
-    catch(err) {
-        ans = false;
-    }
-   return ans;
+  let ans = true;
+  try {
+    jwt.verify(token, jwtPassword);
+  }
+  catch (err) {
+    ans = false;
+  }
+  return ans;
 }
 
 
 function decodeJwt(token) {
-   
-    const decoded = token.decode(token,jwtPassword);
-   if(decoded) return true;
-   else return false;
-    
+
+  const decoded = jwt.decode(token,jwtPassword);
+  if (decoded) return true;
+  else return false;
+
 }
 
 
