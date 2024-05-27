@@ -31,7 +31,7 @@ function verifyJwt(token) {
 
 function decodeJwt(token) {
    
-    const decoded = token.verify(token,jwtPassword);
+    const decoded = token.decode(token,jwtPassword);
    if(decoded) return true;
    else return false;
     
