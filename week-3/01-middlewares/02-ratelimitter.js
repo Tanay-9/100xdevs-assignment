@@ -18,7 +18,7 @@ setInterval(() => {
 
 const limiter = (req,res,next) => {
   const user = req.headers["user-id"];
-  if(numberOfRequestsForUser) 
+  if(numberOfRequestsForUser["user-id"]) 
   {
     numberOfRequestsForUser['user-id'] = numberOfRequestsForUser['user-id'] + 1; 
     if(numberOfRequestsForUser['user-id']>5) 
