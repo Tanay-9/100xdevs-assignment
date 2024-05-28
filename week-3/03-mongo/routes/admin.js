@@ -8,16 +8,16 @@ router.post('/signup', async (req, res) => {
     // Implement admin signup logic
     const username = req.body.username;
     const password = req.body.password;
-    if(!username || !password) return res.status(403).json({
-        message : "input error"
+    if (!username || !password) return res.status(403).json({
+        message: "input error"
     })
-        const adminCreate =  await Admin.create({
+    const adminCreate = await Admin.create({
         username,
         password
     })
     console.log(adminCreate);
-    res.json({
-        message : "Admin Created successfully"
+    return res.json({
+        message: "Admin Created successfully"
     })
 });
 
@@ -39,12 +39,18 @@ router.post('/courses', adminMiddleware, async (req, res) => {
     })
     console.log(newCourse);
     return res.json({
-        message : "Course created successfully", courseId : newCourse.id
-        })
+        message: "Course created successfully", courseId: newCourse.id
+    })
 });
 
-router.get('/courses', adminMiddleware, (req, res) => {
+router.get('/courses', adminMiddleware, async (req, res) => {
     // Implement fetching all courses logic
+    const allCourses = await Course.find({})
+    console.log(allCourses);
+    res.json({
+        courses : allCourses
+    })
+
 });
 
 module.exports = router;
