@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-
+const mongoDBSecret = require('../db_secrets');
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://tanay:EQQBoPkrJnbDOtv1@cluster0.nb4jyzc.mongodb.net/');
+mongoose.connect(mongoDBSecret);
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
