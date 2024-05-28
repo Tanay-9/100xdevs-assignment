@@ -5,35 +5,29 @@ mongoose.connect(mongoDBSecret);
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
-    // Schema definition here
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        unique: true
-    }
+    // Schema defintion here
+    username: String,
+    password: String,
 });
 
 const UserSchema = new mongoose.Schema({
     // Schema definition here
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        unique: true
-    }
+    username: String,
+    password: String,
+    purchasesCourse : [
+        {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Course'
+        }
+    ]
 });
 
 const CourseSchema = new mongoose.Schema({
-    // Schema definition here
+    // Schema definition 
+    title : String,
+    description : String,
+    price : Number,
+    imageLink : String
 });
 
 const Admin = mongoose.model('Admin', AdminSchema);
