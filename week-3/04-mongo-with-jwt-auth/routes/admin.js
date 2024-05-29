@@ -74,7 +74,7 @@ router.post('/courses', adminMiddleware, async (req, res) => {
         console.log(addCourse);
         return res.status(200).json({
             message : "course has been added",
-            courseDetails : addCourse
+            courseDetails : addCourse._id
         })
     }
     else return res.status(404).json({
