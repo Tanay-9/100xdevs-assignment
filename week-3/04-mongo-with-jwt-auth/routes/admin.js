@@ -83,8 +83,22 @@ router.post('/courses', adminMiddleware, async (req, res) => {
 
 });
 
-router.get('/courses', adminMiddleware, (req, res) => {
+router.get('/courses', adminMiddleware, async (req, res) => {
     // Implement fetching all courses logic
+    const courseData = await Course.find({});
+    if(courseData)
+    {
+        console.log(courseData);
+        return res.status(200).json({
+            message : "data retrived",
+            courses : courseData 
+        })
+    }
+    else {
+        return res.status(404).json({
+            message : "courses data retrival failed"
+        })
+    }
 });
 
 module.exports = router;
