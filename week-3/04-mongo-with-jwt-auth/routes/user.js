@@ -44,7 +44,7 @@ router.post('/signin', async (req, res) => {
 
     const userisAvailable = await User.find({ username, password })
     console.log(userisAvailable);
-    if (userisAvailable) {
+    if (userisAvailable.length>0) {
         const token = jwt.sign({ username }, JWT_SECRETS);
         if (token) {
             console.log(token);
@@ -95,8 +95,25 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
         else return res.status(404).json({message : "error"})
 });
 
-router.get('/purchasedCourses', userMiddleware, (req, res) => {
-   
+router.get('/purchasedCourses', userMiddleware, async (req, res) => {
+   const username = req.username;
+    const getUserDetails = await User.findOne({
+        username
+    })
+    if(getUserDetails) {
+        const courses = await Course.find({
+            _id : {
+                $in : getUserDetails.purchasesCourse
+            }
+        })
+        return res.status(200).json({
+            "message" : "purchases found",
+            courses
+        })
+    }
+    return res.status(404).json({
+        message : "something is wrong"
+    })
 });
 
 module.exports = router
