@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
 
-mongoose.connect("mongodb+srv://tanay:EQQBoPkrJnbDOtv1@cluster0.nb4jyzc.mongodb.net/todo-app")
+const mongoose = require('mongoose')
+const db_secrets = require('./db_sec')
+mongoose.connect(db_secrets)
 
 const todoSchema = mongoose.Schema({
     title : String,
