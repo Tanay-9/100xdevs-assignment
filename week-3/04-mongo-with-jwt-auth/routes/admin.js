@@ -21,7 +21,7 @@ router.post('/signup', async (req, res) => {
         password
     })
     console.log(checkIfAdmin);
-    if(checkIfAdmin.length > 0) return res.status(403).json({
+    if(checkIfAdmin) return res.status(403).json({
         message : "admin already exists, try loggin in"
     })
 
