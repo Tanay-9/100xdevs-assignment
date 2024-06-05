@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
-// You have been given a list of items you shopped from the grocery store
-// You need to calculate the total amount of money you spent
+
 
 export const Assignment3 = () => {
     const [items, setItems] = useState([
@@ -11,9 +10,12 @@ export const Assignment3 = () => {
         // Add more items as needed
     ]);
 
-    // Your code starts here
-    const totalValue = 0;
-    // Your code ends here
+  
+    const totalValue = useMemo(function () {
+        const sumOfValues = items.map(item => item.value).reduce((acc, curr) => acc + curr, 0);
+        return sumOfValues;
+    },[items])
+  
     return (
         <div>
             <ul>
