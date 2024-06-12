@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Assign4 } from "./components";
+import { Assign6 } from "./components";
 
 function App () {
   
   return (
     <>
     {/* <Assign1/> */}
-    <Assign4 />
+    <Assign6 />
     </>
   )
 }
