@@ -114,7 +114,7 @@ const Assign6 = () => {
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-black px-4">
-        <div className="border-2 border-dashed border-zinc-400 rounded-3xl w-full max-w-md md:w-3/12">
+        <div className="border-2 border-dashed border-zinc-400 rounded-3xl w-full max-w-md md:w-8/12">
           {showOTP ? (
             <OTP btn="Login" changer={setShowOTP}/>
           ) : (
