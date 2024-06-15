@@ -5,9 +5,12 @@
 const mongoose = require('mongoose');
 const Mongoose = require('mongoose')
 const { Schema } = mongoose;
+const dotenv = require('dotenv');
 
+dotenv.config();
+const mongoURL = process.env.db;
 
-mongoose.connect("mongodb+srv://tanay:EQQBoPkrJnbDOtv1@cluster0.nb4jyzc.mongodb.net/paytm");
+mongoose.connect(mongoURL)
   
   
 
