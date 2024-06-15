@@ -10,7 +10,8 @@ router.get('/',(req,res) => {
     })
 })
 
-router.get('/balance',authMiddleware, async (req,res) => {
+router.get('/balance', authMiddleware , async (req,res) => {
+    console.log('this goes here');
     const userId = req.userId;
     try {
         const accData = await Account.findOne({
@@ -32,8 +33,8 @@ router.get('/balance',authMiddleware, async (req,res) => {
 })
 
 
-router.post('/transfer',authMiddleware, (req,res) => {
-    const {amount, to} = req.body;
+// router.post('/transfer',authMiddleware, (req,res) => {
+//     const {amount, to} = req.body;
 
-})
+// })
 module.exports = router;

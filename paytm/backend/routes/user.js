@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { userValidate, JWT_SECRET, updateValidate } = require('../config');
+const { userValidate, updateValidate } = require('../config');
 const { User, Account } = require('../db');
 const jwt = require("jsonwebtoken");
 const authMiddleware = require('../middleware');
-
+require('dotenv').config();
+const JWT_SECRET = process.env.JWT_SECRET; 
 // Route to check if the router is working
 router.get('/', (req, res) => {
     res.json({
@@ -15,6 +16,7 @@ router.get('/', (req, res) => {
 
 router.post('/signup', async (req, res) => {
     try {
+        console.log("dude");
         const validate = userValidate.safeParse(req.body);
         if (!validate.success) {
             return res.status(400).json({
@@ -87,13 +89,13 @@ router.post('/signin', async (req, res) => {
 router.put('/', authMiddleware, async (req, res) => {
     const body = req.body;
     const validate = updateValidate.safeParse(body);
-
+    console.log(validate);
     if (!validate.success) return res.status(411).json({
         message: validate?.error?.issues[0].message
-    })
-
+    })  
+    console.log(req.userId);
     const update = await User.updateOne({
-        username: body.username
+        _id: req.userId
     }, {
         $set: body
     })
