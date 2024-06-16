@@ -4,83 +4,83 @@ const { Account } = require('../db');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-router.get('/',(req,res) => {
+router.get('/', (req, res) => {
     res.json({
-        message : "this is account route"
+        message: "this is account route"
     })
 })
 
-router.get('/balance', authMiddleware , async (req,res) => {
+router.get('/balance', authMiddleware, async (req, res) => {
     console.log('this goes here');
     const userId = req.userId;
     try {
         const accData = await Account.findOne({
-            userId : userId
+            userId: userId
         })
 
         console.log(accData);
         return res.status(200).json({
-            message : "success",
-            "balance" : accData.balance
+            message: "success",
+            "balance": accData.balance
         })
     }
     catch (err) {
         return res.status(500).json({
-            message : "internal server error"
+            message: "internal server error"
         })
     }
-  
+
 })
 
 
-router.post('/transfer',authMiddleware, async (req,res) => {
-   
+router.post('/transfer', authMiddleware, async (req, res) => {
+
     const session = await mongoose.startSession();
     session.startTransaction();
 
-    const {to,amount} = req.body;
+    const { to, amount } = req.body;
 
     const account = await Account.findOne({
-        userId : req.userId
+        userId: req.userId
     }).session(session);
-    
-    if(!account || account.balance < amount) {
+
+    if (!account || account.balance < amount) {
         await session.abortTransaction();
         return res.status(400).json({
-            message : "insufficient balance"
+            message: "insufficient balance"
         })
     }
 
     const toAccount = await Account.findOne({
-        userId : to
+        userId: to
     }).session(session)
 
-    if(!toAccount) {
+    if (!toAccount) {
         await session.abortTransaction();
         return res.status(404).json({
-            message : "account doesn't exist"
+            message: "account doesn't exist"
         })
     }
 
     await Account.updateOne({
-        userId : req.userId,
-    },{
-        '$inc' : {
-            balance : -amount
+        userId: req.userId,
+    }, {
+        '$inc': {
+            balance: -amount
         }
     }).session(session);
 
     await Account.updateOne({
-        userId : to
+        userId: to
     }, {
-       '$inc' : {
-        balance : amount
-       } 
+        '$inc': {
+            balance: amount
+        }
     }).session(session);
 
     await session.commitTransaction();
     return res.status(200).json({
-        message : "transfer success"
+        message: "transfer success"
     })
 })
 // router.post("/transfer", authMiddleware, async (req, res) => {

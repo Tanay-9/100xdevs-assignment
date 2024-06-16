@@ -5,7 +5,7 @@ const { User, Account } = require('../db');
 const jwt = require("jsonwebtoken");
 const authMiddleware = require('../middleware');
 require('dotenv').config();
-const JWT_SECRET = process.env.JWT_SECRET; 
+const JWT_SECRET = process.env.JWT_SECRET;
 // Route to check if the router is working
 router.get('/', (req, res) => {
     res.json({
@@ -92,7 +92,7 @@ router.put('/', authMiddleware, async (req, res) => {
     console.log(validate);
     if (!validate.success) return res.status(411).json({
         message: validate?.error?.issues[0].message
-    })  
+    })
     console.log(req.userId);
     const update = await User.updateOne({
         _id: req.userId
