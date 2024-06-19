@@ -7,6 +7,7 @@ const authMiddleware = require('../middleware');
 require('dotenv').config();
 const JWT_SECRET = process.env.JWT_SECRET;
 // Route to check if the router is working
+
 router.get('/', (req, res) => {
     res.json({
         message: 'API is working'
@@ -18,17 +19,19 @@ router.post('/signup', async (req, res) => {
     try {
         console.log("dude");
         const validate = userValidate.safeParse(req.body);
+      
         if (!validate.success) {
             return res.status(400).json({
                 message: validate?.error?.issues[0].message,
-
+                // message : validate
             });
         }
-
+       
+        
         const existingUser = await User.findOne({
             username: req.body.username
         });
-
+       
         if (existingUser) {
             return res.status(411).json({
                 message: "user already exists"
@@ -74,9 +77,11 @@ router.post('/signin', async (req, res) => {
     const findUser = await User.findOne({
         username: req.body.username
     })
+    console.log(findUser);
 
-    if (findUser === null) return res.status(411).json({
-        message: "error while login in"
+    if (findUser) return res.status(411).json({
+        message: "user already exists.",
+        
     })
     const token = jwt.sign({ userId: findUser._id }, JWT_SECRET);
 
