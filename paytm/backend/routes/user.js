@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
         if (!validate.success) {
             return res.status(400).json({
                 message: validate?.error?.issues[0].message,
-                // message : validate
+             
             });
         }
        
@@ -79,8 +79,8 @@ router.post('/signin', async (req, res) => {
     })
     console.log(findUser);
 
-    if (findUser) return res.status(411).json({
-        message: "user already exists.",
+    if (!findUser) return res.status(411).json({
+        message: "please signup first.",
         
     })
     const token = jwt.sign({ userId: findUser._id }, JWT_SECRET);
