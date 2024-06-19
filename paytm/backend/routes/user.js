@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { userValidate, updateValidate } = require('../config');
+const { userValidate, updateValidate, inValidate } = require('../config');
 const { User, Account } = require('../db');
 const jwt = require("jsonwebtoken");
 const authMiddleware = require('../middleware');
@@ -67,7 +67,7 @@ router.post('/signup', async (req, res) => {
 
 
 router.post('/signin', async (req, res) => {
-    const validate = userValidate.safeParse(req.body);
+    const validate = inValidate.safeParse(req.body);
     if (!validate.success) {
         return res.json({
             message: validate?.error?.issues[0].message
@@ -83,11 +83,13 @@ router.post('/signin', async (req, res) => {
         message: "please signup first.",
         
     })
+    if(findUser.password !== req.body.password) return res.json({message : "invalid password"})
     const token = jwt.sign({ userId: findUser._id }, JWT_SECRET);
 
     return res.status(200).json({
         message: "sigin done",
-        token
+        token,
+        username : req.body.username
     })
 })
 
@@ -111,9 +113,9 @@ router.put('/', authMiddleware, async (req, res) => {
 })
 
 
-router.get('/bulk', async (req, res) => {
+router.get('/bulk', authMiddleware, async (req, res) => {
     const filter = req.query.filter || '';
-
+    // console.log(req.headers.authorization);
     const users = await User.find({
         $or: [{
             firstName: {
@@ -131,6 +133,7 @@ router.get('/bulk', async (req, res) => {
     })
 
     return res.json({
+        "count" : users.length,
         users: users.map(u => ({
             username: u.username,
             firstName: u.firstName,
