@@ -77,19 +77,21 @@ router.post('/signin', async (req, res) => {
     const findUser = await User.findOne({
         username: req.body.username
     })
-    console.log(findUser);
+    // console.log(findUser, 'user is');
 
-    if (!findUser) return res.status(411).json({
+    if (!findUser) return res.status(401).json({
         message: "please signup first.",
         
     })
-    if(findUser.password !== req.body.password) return res.json({message : "invalid password"})
+    // console.log(findUser);
+    if(findUser.password !== req.body.password) return res.status(401).json({message : "invalid password"})
     const token = jwt.sign({ userId: findUser._id }, JWT_SECRET);
 
     return res.status(200).json({
         message: "sigin done",
         token,
-        username : req.body.username
+        username : findUser.username,
+        firstName : findUser.firstName
     })
 })
 

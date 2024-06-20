@@ -7,10 +7,39 @@ import {
   BottomWarning,
 } from "../components";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 export const Signin = () => {
     const navigate = useNavigate();
+
+
+    const handleSignIn = async () => {
+      try {
+          const res = await axios.post('http://localhost:3000/api/v1/user/signin', {
+              username, 
+              password
+          });
+          console.log(res);
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('username', res.data.username);
+          localStorage.setItem('firstName', res.data.firstName);
+          navigate('/dashboard');
+      } catch (error) {
+          if (error.response) {
+            console.log(error.response);
+              console.error('Error response:', error.response.data.message);
+              alert(error.response.data.message);
+          } else if (error.request) {
+              console.error('Error request:', error.request);
+              alert('Network error');
+          } else {
+              console.error('Error:', error.message);
+              alert('Error signing in');
+          }
+      }
+  };
+
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   return (
@@ -33,16 +62,7 @@ export const Signin = () => {
               label={"Password"}
             />
             <div className="pt-4">
-              <Button onClick={async ()=> {
-                const res = await axios.post('http://localhost:3000/api/v1/user/signin',{
-                    username, 
-                    password
-                })
-                console.log(res.data);
-                localStorage.setItem('token',res.data.token);
-                localStorage.setItem('username',res.data.username);
-                navigate('/dashboard');
-              }} label={"Sign in"} />
+              <Button onClick={handleSignIn} label={"Sign in"} />
             </div>
             <BottomWarning
               label={"Don't have an account?"}

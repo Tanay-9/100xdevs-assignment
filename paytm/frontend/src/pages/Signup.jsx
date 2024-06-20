@@ -7,12 +7,14 @@ import {
   BottomWarning,
 } from "../components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   return (
     <>
@@ -52,6 +54,7 @@ export function Signup() {
                localStorage.setItem('token', response.data.token)
                localStorage.setItem('username', username);
                localStorage.setItem('firstName',firstName);
+               navigate('/dashboard');
               }} label={"Sign up"} />
             </div>
             <BottomWarning

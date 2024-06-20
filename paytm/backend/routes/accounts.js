@@ -39,11 +39,12 @@ router.post('/transfer', authMiddleware, async (req, res) => {
     session.startTransaction();
 
     const { to, amount } = req.body;
-
+    // console.log(to);
     const account = await Account.findOne({
         userId: req.userId
     }).session(session);
 
+    console.log(account);
     if (!account || account.balance < amount) {
         await session.abortTransaction();
         return res.status(400).json({
@@ -54,7 +55,7 @@ router.post('/transfer', authMiddleware, async (req, res) => {
     const toAccount = await Account.findOne({
         userId: to
     }).session(session)
-
+    // console.log(toAccount, 'running');
     if (!toAccount) {
         await session.abortTransaction();
         return res.status(404).json({
