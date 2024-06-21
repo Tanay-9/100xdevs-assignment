@@ -39,7 +39,7 @@ router.post('/transfer', authMiddleware, async (req, res) => {
     session.startTransaction();
 
     const { to, amount } = req.body;
-    // console.log(to);
+    
     const account = await Account.findOne({
         userId: req.userId
     }).session(session);

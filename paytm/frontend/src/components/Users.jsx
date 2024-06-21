@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import { useNavigate } from "react-router-dom";
 
 export const Users = () => {
-
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
 
@@ -13,21 +13,25 @@ export const Users = () => {
   }, [filter]);
 
   const getData = async () => {
-    const token = localStorage.getItem('token')
-    console.log(token);
-    const res = await axios.get(
-      "http://localhost:3000/api/v1/user/bulk?filter=" + filter,{
-        headers: {
-            Authorization:"Bearer "+token
-          }
-        
-      }
-    );
-    // setUsers(res.data.users)
-    console.log(res.data);
-    const currentUser = localStorage.getItem("username");
-    setUsers(res.data.users.filter((u) => u.username !== currentUser));
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/user/bulk?filter=${filter}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+  
+      const currentUser = localStorage.getItem("username");
+      setUsers(response.data.users.filter((u) => u.username !== currentUser));
+    } catch (error) {
+        alert("An error occurred. Please try again."); 
+        navigate("/signin"); 
+    }
   };
+  
   return !users ? (
     "on it"
   ) : (
@@ -68,9 +72,12 @@ function User({ user }) {
       </div>
 
       <div className="flex flex-col justify-center h-ful">
-        <Button onClick={(e) => {
-          navigate(`/send?to=${user._id}&name=${user.firstName}`)
-        }} label={"Send Money"} />
+        <Button
+          onClick={(e) => {
+            navigate(`/send?to=${user._id}&name=${user.firstName}`);
+          }}
+          label={"Send Money"}
+        />
       </div>
     </div>
   );
