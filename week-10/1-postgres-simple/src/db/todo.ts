@@ -46,7 +46,14 @@ export async function updateTodo(todoId: number) {
         const updateQuery = `UPDATE todos SET done = TRUE WHERE id = $1 RETURNING *`
 
         const res = await client.query(updateQuery,[todoId]);
+        const updatedData = res.rows[0];
         console.log('result is',res);
+        return ({
+            title : updatedData.title,
+            description : updatedData.description,
+            done : updatedData.done,
+            id : updatedData.id
+        })
     }
     catch(err) {
         console.log('error is',err);
