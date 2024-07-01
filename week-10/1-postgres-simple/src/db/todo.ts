@@ -74,5 +74,23 @@ export async function updateTodo(todoId: number) {
  * }]
  */
 export async function getTodos(userId: number) {
+    try {
+        await client.connect(); // Connect to the database
 
+        const todosQuery = `SELECT id, title, description, done FROM todos WHERE user_id = $1`; // Query to get todos for the given user ID
+        const res = await client.query(todosQuery, [userId]); // Execute the query
+
+        // Map the result rows to an array of todo objects
+        return res.rows.map((row: any) => ({
+            id: row.id,
+            title: row.title,
+            description: row.description,
+            done: row.done
+        }));
+    } catch (err) {
+        console.error('Error:', err); // Log any errors that occur
+        return [];
+    } finally {
+        await client.end(); // Ensure the database connection is closed
+    }
 }
