@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 
+import dotenv from 'dotenv'
+dotenv.config();
 const prisma = new PrismaClient();
-
+const Todo = prisma.todo;
 /*
  * Function should insert a new todo for this user
  * Should return a todo object
@@ -13,7 +15,20 @@ const prisma = new PrismaClient();
  * }
  */
 export async function createTodo(userId: number, title: string, description: string) {
-    
+    const res = await Todo.create({
+        data : {
+            userId,
+            title,
+            description   
+        }
+    })
+    console.log(res);
+    return {
+        title : res.title,
+        description : res.description,
+        done : res.done,
+        id : res.id
+    }
 }
 /*
  * mark done as true for this specific todo.
@@ -26,7 +41,25 @@ export async function createTodo(userId: number, title: string, description: str
  * }
  */
 export async function updateTodo(todoId: number) {
-
+    const res = await Todo.update({
+        where : {id : todoId},
+        data: {
+            done : true
+        },
+        select : {
+            title : true,
+            description : true,
+            done : true,
+            id : true
+        }
+       
+    })
+    return {
+        title : res.title,
+        description : res.description,
+        id: res.id,
+        done : res.done
+    }
 }
 
 /*
