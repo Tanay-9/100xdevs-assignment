@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -17,18 +17,21 @@ const User = prisma.user;
  */
 export async function createUser(username: string, password: string, name: string) {
     const res = await User.create({
-        data : {
+        data: {
             username,
             password,
             name
         },
-        select : {
-            id : true,
-            username : true,
-            name : true
+        select: {
+           username: true,
+           password: true,
+           name: true,
+           id : true
         }
-    })   
-    console.log(res);
+    });
+    
+    console.log(res); // For debugging or logging purposes
+    return res; // Return the created user object
 }
 
 /*
@@ -41,9 +44,18 @@ export async function createUser(username: string, password: string, name: strin
  */
 export async function getUser(userId: number) {
     const result = await User.findFirst({
-        where : {id : userId}
-
-        
-    })
-    console.log(result);
+        where: { id: userId },
+        select: {
+            username: true,
+            password: true,
+            name: true
+        }
+    });
+    
+    // Return an object with username, password, and name
+    return {
+        username: result?.username,
+        password: result?.password,
+        name: result?.name
+    };
 }

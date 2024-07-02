@@ -73,5 +73,14 @@ export async function updateTodo(todoId: number) {
  * }]
  */
 export async function getTodos(userId: number) {
-
+    const res = await Todo.findMany({
+        where : {userId : userId},
+        select : {
+            id : true,
+            title : true,
+            description : true,
+            done : true
+        }
+    })
+    return res;
 }
