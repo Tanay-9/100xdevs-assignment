@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
         if (!validate.success) {
             return res.status(400).json({
                 message: validate?.error?.issues[0].message,
-             
+                validate
             });
         }
        
@@ -133,6 +133,8 @@ router.get('/bulk', authMiddleware, async (req, res) => {
         }
         ]
     })
+
+    
 
     return res.json({
         "count" : users.length,

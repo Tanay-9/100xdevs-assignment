@@ -1,4 +1,3 @@
-const JWT_SECRET = 'tanay';
 
 const zod = require('zod');
 const userValidate = zod.object({
@@ -18,4 +17,4 @@ const updateValidate = zod.object({
   password: zod.string().min(8).optional()
 })
 
-module.exports = { JWT_SECRET, userValidate, updateValidate,inValidate };
+module.exports = { userValidate, updateValidate,inValidate };

@@ -8,6 +8,8 @@ import {
 } from "../components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { BACKEND_URL } from "../config";
 
 export function Signup() {
   const [firstName, setFirstName] = useState("");
@@ -45,7 +47,9 @@ export function Signup() {
             />
             <div className="pt-4">
               <Button onClick={async ()=>{
-               const response =  await axios.post('http://localhost:3000/api/v1/user/signup',{
+                try {
+                  toast.dismiss();
+                  const response =  await axios.post(`${BACKEND_URL}/api/v1/user/signup`,{
                     firstName,
                     lastName,
                     username,
@@ -55,6 +59,17 @@ export function Signup() {
                localStorage.setItem('username', username);
                localStorage.setItem('firstName',firstName);
                navigate('/dashboard');
+                }
+                catch(err) {
+                  console.log(err);
+                  toast.error(
+                    err.response?.data?.message || 'An error occurred',
+                    {
+                      autoClose: 2000, // Duration in milliseconds
+                    }
+                  );
+                }
+            
               }} label={"Sign up"} />
             </div>
             <BottomWarning

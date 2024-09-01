@@ -8,34 +8,30 @@ import {
 } from "../components";
 import axios from "axios";
 import {  useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import { BACKEND_URL } from "../config";
 export const Signin = () => {
     const navigate = useNavigate();
 
 
     const handleSignIn = async () => {
       try {
-          const res = await axios.post('http://localhost:3000/api/v1/user/signin', {
+          const res = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
               username, 
               password
           });
-          console.log(res);
+       
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('username', res.data.username);
           localStorage.setItem('firstName', res.data.firstName);
           navigate('/dashboard');
       } catch (error) {
-          if (error.response) {
-            console.log(error.response);
-              console.error('Error response:', error.response.data.message);
-              alert(error.response.data.message);
-          } else if (error.request) {
-              console.error('Error request:', error.request);
-              alert('Network error');
-          } else {
-              console.error('Error:', error.message);
-              alert('Error signing in');
+        toast.error(
+          err.response?.data?.message || 'An error occurred',
+          {
+            autoClose: 2000, // Duration in milliseconds
           }
+        );
       }
   };
 
